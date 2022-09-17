@@ -53,7 +53,7 @@ pub fn set_config(config: &mut web::ServiceConfig) {
     use api_sample::handler::product_register::ProductRegisterHandler;
     use api_sample::handler::product_search::ProductSearchHandler;
     config.service(
-        web::scope("/sample_api")
+        web::scope("/api_sample")
             .route("/", web::post().to(AuthenticateHandler::authenticate))
             .route(
                 "/search/product",
