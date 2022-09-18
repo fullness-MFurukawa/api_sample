@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-actix-web = { version = "4.1.0", features = ["openssl"] }
+actix-web   =   { version = "4.1.0", features = ["openssl"] }
 serde       =   { version = "1.0.138", features = ["derive"] }
 openssl     =   { version = "0.10.41", features = ["v110"] }
 sea-orm     =   { version = "0.9.1" , features=["sqlx-postgres" , "runtime-tokio-rustls" , "macros"] , default-features = false}
@@ -16,7 +16,6 @@ log         =   "0.4.17"
 anyhow      =   "1.0.62"
 thiserror   =   "1.0.32"
 async-trait =   "0.1.57"
-# ISO8601に準拠した日付・時間
-chrono = "0.4.19"
-serde_json = "1.0.85"
+chrono      =   "0.4.19" # ISO8601に準拠した日付・時間
+serde_json  =   "1.0.85"
 app_commons = {git = "https://github.com/fullness-MFurukawa/app_commons" , rev="8e7d2e5666e7bc186bc0f86a471ac5b3bfdefbda" }
