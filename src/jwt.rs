@@ -55,6 +55,7 @@ pub struct ApiJwt;
 impl JwtEncoder for ApiJwt{}
 // トークンのデコード
 impl JwtDecoder<ApiClaims, ApiAppError, HttpRequest> for ApiJwt {
+    //  ヘッダーの解析
     fn parse_header(&self, request: &HttpRequest) -> Result<String> {
         // 認可情報ヘッダーの取得
         let header_value = match request.headers().get(JWT_HEADER_KEY) {
