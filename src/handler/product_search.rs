@@ -21,12 +21,11 @@ impl ProductSearchHandler {
         provider: web::Data<Arc<AppServiceProvider>>) -> Result<impl Responder> {
         // 入力値の検証
         match form.validate_value() {
-            Ok(_) => (),
             Err(error) => {
                 return Ok(HttpResponse::BadRequest()
                     .content_type(APPLICATION_JSON)
                     .json(error.errors))
-            }
+            },Ok(_) => ()
         };
 
         match provider.search_service.search(&pool, &form).await {

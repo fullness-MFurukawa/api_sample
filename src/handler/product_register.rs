@@ -21,12 +21,11 @@ impl ProductRegisterHandler {
         provider: web::Data<Arc<AppServiceProvider>>) -> Result<impl Responder> {
         // 入力値の検証
         match form.validate_value() {
-            Ok(_) => (),
             Err(error) => {
                 return Ok(HttpResponse::BadRequest()
                     .content_type(APPLICATION_JSON)
                     .json(error.errors))
-            }
+            },Ok(_) => ()
         };
         // 商品を永続化する
         match provider.register_service.execute(&pool, &form).await {
