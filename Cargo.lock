@@ -318,7 +318,6 @@ dependencies = [
  "log",
  "mime",
  "openssl",
- "rusty-money",
  "sea-orm",
  "serde",
  "serde_json",
