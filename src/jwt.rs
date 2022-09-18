@@ -12,13 +12,13 @@ use crate::{Result,ApiAppError};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ClaimsResponse {
     pub state: String,
-    pub token: String,
+    pub token: String
 }
 impl ClaimsResponse {
     pub fn new(_state: &str, _token: &str) -> Self {
         Self {
             state: String::from(_state),
-            token: String::from(_token),
+            token: String::from(_token)
         }
     }
 }
