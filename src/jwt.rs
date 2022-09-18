@@ -55,7 +55,7 @@ pub struct ApiJwt;
 impl JwtEncoder for ApiJwt{}
 // トークンのデコード
 impl JwtDecoder<ApiClaims, ApiAppError, HttpRequest> for ApiJwt {
-    fn decode_header(&self, request: &HttpRequest) -> Result<String> {
+    fn parse_header(&self, request: &HttpRequest) -> Result<String> {
         // 認可情報ヘッダーの取得
         let header_value = match request.headers().get(JWT_HEADER_KEY) {
             Some(header) => header,
@@ -95,8 +95,8 @@ impl FromRequest for ApiClaims {
         let request = req.clone();
         Box::pin(async move {
             let decoder = ApiJwt::default();
-            let token = decoder.decode_header(&request)?;
-            match decoder.decode_jwt_token(token.as_str()) {
+            let token = decoder.parse_header(&request)?;
+            match decoder.decode(token.as_str()) {
                 Ok(token_data) => Ok(token_data.claims),
                 Err(error) => Err(ApiAppError::NotAuthorizeError(ApiErrorInfo::new(
                     "authorization error", error.to_string().as_str()))),
