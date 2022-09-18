@@ -18,8 +18,7 @@ impl ProductSearchHandler {
         _claims: ApiClaims,
         form: web::Json<ProductSearchForm>,
         pool: web::Data<Arc<DatabaseConnection>>,
-        provider: web::Data<Arc<AppServiceProvider>>,
-    ) -> Result<impl Responder> {
+        provider: web::Data<Arc<AppServiceProvider>>) -> Result<impl Responder> {
         // 入力値の検証
         match form.validate_value() {
             Ok(_) => (),
@@ -37,9 +36,7 @@ impl ProductSearchHandler {
             Err(error) => {
                 let message = ApiAppError::from(error)?;
                 Err(ApiAppError::SearchError(ApiErrorInfo::new(
-                    "search error",
-                    message.as_str(),
-                )))
+                    "search error", message.as_str())))
             }
         }
     }

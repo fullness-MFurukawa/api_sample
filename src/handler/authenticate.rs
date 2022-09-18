@@ -4,10 +4,10 @@ use actix_web::{web, HttpResponse, Responder};
 use mime::APPLICATION_JSON;
 use app_commons::application::sea_orm::provider::AppServiceProvider;
 use app_commons::presentation::forms::LoginForm;
-use app_commons::presentation::jwt::{ClaimsGenerator, JwtEncoder, JwtEncoderImpl};
+use app_commons::presentation::jwt::{ClaimsGenerator, JwtEncoder};
 use app_commons::presentation::validate::AppValidator;
 use crate::handler::error::ApiErrorInfo;
-use crate::handler::jwt::{ApiClaims, ClaimsResponse};
+use crate::handler::jwt::{ApiClaims, ApiJwt, ClaimsResponse};
 use crate::{ApiAppError, Result};
 ///
 /// 認証 リクエストハンドラ
@@ -18,8 +18,7 @@ impl AuthenticateHandler {
     pub async fn authenticate(
         form: web::Json<LoginForm>,
         pool: web::Data<Arc<DatabaseConnection>>,
-        provider: web::Data<Arc<AppServiceProvider>>,
-    ) -> Result<impl Responder> {
+        provider: web::Data<Arc<AppServiceProvider>>) -> Result<impl Responder> {
         // 入力値の検証
         match form.validate_value() {
             Ok(_) => (),
@@ -34,7 +33,7 @@ impl AuthenticateHandler {
             Ok(user) => {
                 // JWTトークンの生成
                 let claims = ApiClaims::generate(&user);
-                let token = JwtEncoderImpl::encode(&claims);
+                let token = ApiJwt::encode(&claims);
                 Ok(HttpResponse::Ok()
                     .content_type(APPLICATION_JSON)
                     .json(ClaimsResponse::new("authenticate success", token.as_str())))
@@ -42,9 +41,7 @@ impl AuthenticateHandler {
             Err(error) => {
                 let message = ApiAppError::from(error)?;
                 Err(ApiAppError::SearchError(ApiErrorInfo::new(
-                    "authenticate error",
-                    message.as_str(),
-                )))
+                    "authenticate error", message.as_str())))
             }
         }
     }

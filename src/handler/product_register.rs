@@ -18,8 +18,7 @@ impl ProductRegisterHandler {
         _claims: ApiClaims,
         form: web::Json<ProductRegisterForm>,
         pool: web::Data<Arc<DatabaseConnection>>,
-        provider: web::Data<Arc<AppServiceProvider>>,
-    ) -> Result<impl Responder> {
+        provider: web::Data<Arc<AppServiceProvider>>) -> Result<impl Responder> {
         // 入力値の検証
         match form.validate_value() {
             Ok(_) => (),

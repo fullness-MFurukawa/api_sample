@@ -385,7 +385,7 @@ dependencies = [
 [[package]]
 name = "app_commons"
 version = "0.1.0"
-source = "git+https://github.com/fullness-MFurukawa/app_commons?rev=ca1eaaaa2cb85bc4774663f966a3d44f0624f573#ca1eaaaa2cb85bc4774663f966a3d44f0624f573"
+source = "git+https://github.com/fullness-MFurukawa/app_commons?rev=d6a421955e188518444489253acbd524121ca6d7#d6a421955e188518444489253acbd524121ca6d7"
 dependencies = [
  "actix",
  "anyhow",
