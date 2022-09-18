@@ -59,10 +59,8 @@ impl JwtDecoder<ApiClaims, ApiAppError, HttpRequest> for ApiJwt {
         // 認可情報ヘッダーの取得
         let header_value = match request.headers().get(JWT_HEADER_KEY) {
             Some(header) => header,
-            None => {
-                return Err(ApiAppError::NotAuthorizeError(ApiErrorInfo::new(
+            None => return Err(ApiAppError::NotAuthorizeError(ApiErrorInfo::new(
                     "authorization error", "Authorization header not found.")))
-            }
         };
         // トークンの取得
         let token = header_value.to_str().unwrap();
@@ -75,10 +73,8 @@ impl JwtDecoder<ApiClaims, ApiAppError, HttpRequest> for ApiJwt {
                         "authorization error", "invalid schema type.")));
                 }
             }
-            None => {
-                return Err(ApiAppError::NotAuthorizeError(ApiErrorInfo::new(
+            None => return Err(ApiAppError::NotAuthorizeError(ApiErrorInfo::new(
                     "authorization error", "invalid schema type.")))
-            }
         };
         // JWTトークンの取得
         match split_token.next() {
