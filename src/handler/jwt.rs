@@ -5,7 +5,7 @@ use actix_web::{FromRequest, HttpRequest};
 use chrono::Duration;
 use serde::{Deserialize, Serialize};
 use app_commons::application::transfers::UserDto;
-use app_commons::presentation::jwt::{ClaimsGenerator, JwtDecoder ,JwtEncoder};
+use app_commons::presentation::jwt::{ClaimsGenerator, JwtDecoder ,JwtEncoder , JWT_HEADER_KEY};
 use crate::handler::error::ApiErrorInfo;
 use crate::{Result,ApiAppError};
 
@@ -57,7 +57,7 @@ impl JwtEncoder for ApiJwt{}
 impl JwtDecoder<ApiClaims, ApiAppError, HttpRequest> for ApiJwt {
     fn decode_header(&self, request: &HttpRequest) -> Result<String> {
         // 認可情報ヘッダーの取得
-        let header_value = match request.headers().get("Authorization") {
+        let header_value = match request.headers().get(JWT_HEADER_KEY) {
             Some(header) => header,
             None => {
                 return Err(ApiAppError::NotAuthorizeError(ApiErrorInfo::new(

@@ -25,4 +25,4 @@ rusty-money =   { version = "0.4.1", features = ["iso", "crypto"] }
 # ISO8601に準拠した日付・時間
 chrono = "0.4.19"
 serde_json = "1.0.85"
-app_commons = {git = "https://github.com/fullness-MFurukawa/app_commons" , rev="d6a421955e188518444489253acbd524121ca6d7" }
+app_commons = {git = "https://github.com/fullness-MFurukawa/app_commons" , rev="56f1445baf398b58ad01055f24b7a0566e4619d3" }
