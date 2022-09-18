@@ -36,9 +36,7 @@ impl ProductRegisterHandler {
             Err(error) => {
                 let message = ApiAppError::from(error)?;
                 Err(ApiAppError::SearchError(ApiErrorInfo::new(
-                    "register error",
-                    message.as_str(),
-                )))
+                    "register error", message.as_str())))
             }
         }
     }
