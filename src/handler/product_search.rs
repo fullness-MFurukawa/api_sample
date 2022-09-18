@@ -5,8 +5,8 @@ use mime::APPLICATION_JSON;
 use app_commons::application::sea_orm::provider::AppServiceProvider;
 use app_commons::presentation::forms::ProductSearchForm;
 use app_commons::presentation::validate::AppValidator;
-use crate::handler::error::ApiErrorInfo;
-use crate::handler::jwt::ApiClaims;
+use crate::error::ApiErrorInfo;
+use crate::jwt::ApiClaims;
 use crate::{ApiAppError, Result};
 
 ///

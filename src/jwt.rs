@@ -6,7 +6,7 @@ use chrono::Duration;
 use serde::{Deserialize, Serialize};
 use app_commons::application::transfers::UserDto;
 use app_commons::presentation::jwt::{ClaimsGenerator, JwtDecoder ,JwtEncoder , JWT_HEADER_KEY};
-use crate::handler::error::ApiErrorInfo;
+use crate::error::ApiErrorInfo;
 use crate::{Result,ApiAppError};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -61,9 +61,7 @@ impl JwtDecoder<ApiClaims, ApiAppError, HttpRequest> for ApiJwt {
             Some(header) => header,
             None => {
                 return Err(ApiAppError::NotAuthorizeError(ApiErrorInfo::new(
-                    "authorization error",
-                    "authorization header not found.",
-                )))
+                    "authorization error", "Authorization header not found.")))
             }
         };
         // トークンの取得
@@ -74,25 +72,19 @@ impl JwtDecoder<ApiClaims, ApiAppError, HttpRequest> for ApiJwt {
             Some(schema_type) => {
                 if schema_type != "Bearer" {
                     return Err(ApiAppError::NotAuthorizeError(ApiErrorInfo::new(
-                        "authorization error",
-                        "an invalid schema type was specified.",
-                    )));
+                        "authorization error", "invalid schema type.")));
                 }
             }
             None => {
                 return Err(ApiAppError::NotAuthorizeError(ApiErrorInfo::new(
-                    "authorization error",
-                    "an invalid schema type was specified.",
-                )))
+                    "authorization error", "invalid schema type.")))
             }
         };
         // JWTトークンの取得
         match split_token.next() {
             Some(jwt_token) => Ok(jwt_token.to_string()),
             None => Err(ApiAppError::NotAuthorizeError(ApiErrorInfo::new(
-                "authorization error",
-                "JWT token not found.",
-            ))),
+                "authorization error", "JWT token not found."))),
         }
     }
 }
@@ -111,9 +103,7 @@ impl FromRequest for ApiClaims {
             match decoder.decode_jwt_token(token.as_str()) {
                 Ok(token_data) => Ok(token_data.claims),
                 Err(error) => Err(ApiAppError::NotAuthorizeError(ApiErrorInfo::new(
-                    "authorization error",
-                    error.to_string().as_str(),
-                ))),
+                    "authorization error", error.to_string().as_str()))),
             }
         })
     }
