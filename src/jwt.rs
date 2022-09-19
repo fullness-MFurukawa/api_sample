@@ -96,9 +96,13 @@ impl FromRequest for ApiClaims {
         let request = req.clone();
         Box::pin(async move {
             let decoder = ApiJwt::default();
+            // リクエストヘッダーを解析する
             let token = decoder.parse_header(&request)?;
+            // 解析結果に問題が無ければトークンをデコードする
             match decoder.decode(token.as_str()) {
+                // デコードに成功したらClaimsを返す
                 Ok(token_data) => Ok(token_data.claims),
+                // エラーを返す
                 Err(error) => Err(ApiAppError::NotAuthorizeError(ApiErrorInfo::new(
                     "authorization error", error.to_string().as_str()))),
             }

@@ -12,7 +12,6 @@ async fn main() -> std::io::Result<()> {
     let pool = SeaOrmPool::get().await;
     // アプリケーションサービスプロバイダの生成
     let provider = AppServiceProvider::new();
-
     /*  サーバーの実行 */
     HttpServer::new(move || {
         App::new()
@@ -25,8 +24,7 @@ async fn main() -> std::io::Result<()> {
             .configure(set_config)
     })
         .bind_openssl("127.0.0.1:8082", create_ssl_acceptor_builder())?
-        .run()
-        .await
+        .run().await
 }
 
 ///
