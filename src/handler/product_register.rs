@@ -23,15 +23,13 @@ impl ProductRegisterHandler {
         match form.validate_value() {
             Err(error) => {
                 return Ok(HttpResponse::BadRequest()
-                    .content_type(APPLICATION_JSON)
-                    .json(error.errors))
+                    .content_type(APPLICATION_JSON).json(error.errors))
             },Ok(_) => ()
         };
         // 商品を永続化する
         match provider.register_service.execute(&pool, &form).await {
             Ok(new_product) => Ok(HttpResponse::Ok()
-                .content_type(APPLICATION_JSON)
-                .json(new_product)),
+                .content_type(APPLICATION_JSON).json(new_product)),
             Err(error) => {
                 let message = ApiAppError::from(error)?;
                 Err(ApiAppError::SearchError(ApiErrorInfo::new(

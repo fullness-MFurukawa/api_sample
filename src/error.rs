@@ -62,17 +62,15 @@ impl ResponseError for ApiAppError {
                 error!("{:?}", error);
                 let info = ApiErrorInfo::new("stop service", "Service is down.");
                 HttpResponse::InternalServerError()
-                    .content_type(APPLICATION_JSON)
-                    .json(info)
+                    .content_type(APPLICATION_JSON).json(info)
             }
             ApiAppError::SearchError(info) | ApiAppError::AuthenticateError(info) => {
                 HttpResponse::BadRequest()
-                    .content_type(APPLICATION_JSON)
-                    .json(info)
+                    .content_type(APPLICATION_JSON).json(info)
             }
-            ApiAppError::NotAuthorizeError(info) => HttpResponse::Unauthorized()
-                .content_type(APPLICATION_JSON)
-                .json(info),
+            ApiAppError::NotAuthorizeError(info) =>
+                HttpResponse::Unauthorized()
+                .content_type(APPLICATION_JSON).json(info)
         }
     }
 }

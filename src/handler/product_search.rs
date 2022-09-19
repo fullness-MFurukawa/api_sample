@@ -23,15 +23,13 @@ impl ProductSearchHandler {
         match form.validate_value() {
             Err(error) => {
                 return Ok(HttpResponse::BadRequest()
-                    .content_type(APPLICATION_JSON)
-                    .json(error.errors))
+                    .content_type(APPLICATION_JSON).json(error.errors))
             },Ok(_) => ()
         };
 
         match provider.search_service.search(&pool, &form).await {
             Ok(products) => Ok(HttpResponse::Ok()
-                .content_type(APPLICATION_JSON)
-                .json(products)),
+                .content_type(APPLICATION_JSON).json(products)),
             Err(error) => {
                 let message = ApiAppError::from(error)?;
                 Err(ApiAppError::SearchError(ApiErrorInfo::new(
