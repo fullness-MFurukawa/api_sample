@@ -37,16 +37,15 @@ impl Display for ApiAppError {
 
 impl From<AppError> for ApiAppError {
     fn from(error: AppError) -> Self {
-        let er = match error {
+        match error {
             AppError::SearchError(msg) =>
                 Self::SearchError(ApiErrorInfo::new("search error" , msg.as_str())),
             AppError::RegisterError(msg) =>
                 Self::RegisterError(ApiErrorInfo::new("register error" , msg.as_str())),
             AppError::AuthenticateError(msg) =>
-                Self::RegisterError(ApiErrorInfo::new("authenticate error" , msg.as_str())),
+                Self::AuthenticateError(ApiErrorInfo::new("authenticate error" , msg.as_str())),
             AppError::InternalError(..) => ApiAppError::InternalError(error)
-        };
-        er
+        }
     }
 }
 ///

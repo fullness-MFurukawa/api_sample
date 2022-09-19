@@ -23,7 +23,7 @@ impl AuthenticateHandler {
         // 認証結果レスポンス
         #[derive(Debug, Clone, Serialize, Deserialize)]
         struct ClaimsResponse {
-            state: String,
+            status: String,
             token: String
         }
 
@@ -42,7 +42,7 @@ impl AuthenticateHandler {
                 let token = ApiJwt::encode(&claims);
                 Ok(HttpResponse::Ok()
                     .content_type(APPLICATION_JSON)
-                    .json(ClaimsResponse{state:String::from("authenticate success"), token}))
+                    .json(ClaimsResponse{status:String::from("authenticate success"), token}))
             }
             Err(error) => Err(ApiAppError::from(error))
         }

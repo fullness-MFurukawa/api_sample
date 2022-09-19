@@ -18,4 +18,4 @@ thiserror   =   "1.0.35"
 async-trait =   "0.1.57"
 chrono      =   "0.4.1" # ISO8601に準拠した日付・時間
 serde_json  =   "1.0.85"
-app_commons = {git = "https://github.com/fullness-MFurukawa/app_commons" , rev="2c0a0f7aa16a27bbbff6939265f570d73417e4cc" }
+app_commons = {git = "https://github.com/fullness-MFurukawa/app_commons" , rev="5761ad7315dfebfbfebe977ae6fafbb5badc5bcf" }
