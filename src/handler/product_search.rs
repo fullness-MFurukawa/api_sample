@@ -26,7 +26,7 @@ impl ProductSearchHandler {
                     .content_type(APPLICATION_JSON).json(error.errors))
             },Ok(_) => ()
         };
-
+        // キーワードによる商品情報検索
         match provider.search_service.search(&pool, &form).await {
             Ok(products) => Ok(HttpResponse::Ok()
                 .content_type(APPLICATION_JSON).json(products)),
