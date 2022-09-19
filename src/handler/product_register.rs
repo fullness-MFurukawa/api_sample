@@ -1,5 +1,5 @@
-use sea_orm::DatabaseConnection;
 use std::sync::Arc;
+use sea_orm::DatabaseConnection;
 use actix_web::{web, HttpResponse, Responder};
 use mime::APPLICATION_JSON;
 use app_commons::application::sea_orm::provider::AppServiceProvider;

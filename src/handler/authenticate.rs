@@ -1,5 +1,5 @@
-use sea_orm::DatabaseConnection;
 use std::sync::Arc;
+use sea_orm::DatabaseConnection;
 use actix_web::{web, HttpResponse, Responder};
 use mime::APPLICATION_JSON;
 use app_commons::application::sea_orm::provider::AppServiceProvider;
@@ -23,8 +23,7 @@ impl AuthenticateHandler {
         match form.validate_value() {
             Err(error) => {
                 return Ok(HttpResponse::BadRequest()
-                    .content_type(APPLICATION_JSON)
-                    .json(error.errors))
+                    .content_type(APPLICATION_JSON).json(error.errors))
             },Ok(_) => ()
         };
         // 認証処理
