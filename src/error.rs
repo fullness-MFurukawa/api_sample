@@ -65,18 +65,20 @@ impl ResponseError for ApiAppError {
     // エラーレスポンスの生成
     fn error_response(&self) -> HttpResponse {
         match self {
-            ApiAppError::InternalError(error) => { // 内部エラー
+            // 内部エラー
+            ApiAppError::InternalError(error) => {
                 error!("{:?}", error); // エラーログを出力する
                 // エラー情報を生成する
                 let info = ApiErrorInfo::new("stop service", "Service is down.");
                 HttpResponse::InternalServerError().content_type(APPLICATION_JSON).json(info)
-            }
-            // 検索 、 登録　、認証エラー
-            ApiAppError::SearchError(info) |
+            },
+            // 検索エラー
+            ApiAppError::SearchError(info) =>
+                HttpResponse::NotFound().content_type(APPLICATION_JSON).json(info),
+            // 登録　、認証エラー
             ApiAppError::RegisterError(info) |
-            ApiAppError::AuthenticateError(info) => {
-                HttpResponse::BadRequest().content_type(APPLICATION_JSON).json(info)
-            }
+            ApiAppError::AuthenticateError(info) =>
+                HttpResponse::BadRequest().content_type(APPLICATION_JSON).json(info),
             // 無認可エラー
             ApiAppError::NotAuthorizeError(info) =>
                 HttpResponse::Unauthorized().content_type(APPLICATION_JSON).json(info)

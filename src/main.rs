@@ -54,12 +54,10 @@ pub fn set_config(config: &mut web::ServiceConfig) {
         web::scope("/api_sample")
             .route("/", web::post().to(AuthenticateHandler::authenticate))
             .route(
-                "/search/product",
-                web::get().to(ProductSearchHandler::search),
+                "/search/product", web::get().to(ProductSearchHandler::search),
             )
             .route(
-                "/register/product",
-                web::post().to(ProductRegisterHandler::register),
-            ),
+                "/register/product", web::post().to(ProductRegisterHandler::register),
+            )
     );
 }
