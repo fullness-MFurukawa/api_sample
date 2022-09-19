@@ -9,19 +9,6 @@ use app_commons::presentation::jwt::{ClaimsGenerator, JwtDecoder ,JwtEncoder , J
 use crate::error::ApiErrorInfo;
 use crate::{Result,ApiAppError};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ClaimsResponse {
-    pub state: String,
-    pub token: String
-}
-impl ClaimsResponse {
-    pub fn new(_state: &str, _token: &str) -> Self {
-        Self {
-            state: String::from(_state),
-            token: String::from(_token)
-        }
-    }
-}
 
 // クレーム(認証に必要な情報)
 #[derive(Debug, Serialize, Deserialize)]
@@ -35,10 +22,10 @@ pub struct ApiClaims {
 impl ClaimsGenerator<UserDto> for ApiClaims {
     fn generate(user: &UserDto) -> Self {
         let now = chrono::Utc::now();
-        let _iat = now.timestamp();
+        let iat = now.timestamp();
         // クレーム(Payload)の生成
         Self {
-            iat: _iat,                                     // 取得日時の設定
+            iat,                                           // 取得日時の設定
             exp: (now + Duration::minutes(5)).timestamp(), // 有効期限を5分に設定
             sub: String::from("M.Furukawa"),            // オーナー識別子を設定
             user_id: user.user_id.clone(),                 // ユーザーidを設定
@@ -46,6 +33,31 @@ impl ClaimsGenerator<UserDto> for ApiClaims {
         }
     }
 }
+///
+/// リクエスト受信時の前処理
+///
+impl FromRequest for ApiClaims {
+    type Error = ApiAppError;
+    type Future = Pin<Box<dyn Future<Output = Result<Self>>>>;
+    fn from_request(req: &HttpRequest, _payload: &mut Payload) -> Self::Future {
+        let request = req.clone();
+        Box::pin(async move {
+            let decoder = ApiJwt::default();
+            // リクエストヘッダーを解析する
+            let token = decoder.parse_header(&request)?;
+            // 解析結果に問題が無ければトークンをデコードする
+            match decoder.decode(token.as_str()) {
+                // デコードに成功したらClaimsを返す
+                Ok(token_data) => Ok(token_data.claims),
+                // エラーを返す
+                Err(error) => Err(ApiAppError::NotAuthorizeError(ApiErrorInfo::new(
+                    "authorization error", error.to_string().as_str()))),
+            }
+        })
+    }
+}
+
+
 ///
 /// API用Jwtトークンのエンコードとデコード
 ///
@@ -86,27 +98,4 @@ impl JwtDecoder<ApiClaims, ApiAppError, HttpRequest> for ApiJwt {
     }
 }
 
-///
-/// リクエスト受信時の前処理
-///
-impl FromRequest for ApiClaims {
-    type Error = ApiAppError;
-    type Future = Pin<Box<dyn Future<Output = Result<Self>>>>;
-    fn from_request(req: &HttpRequest, _payload: &mut Payload) -> Self::Future {
-        let request = req.clone();
-        Box::pin(async move {
-            let decoder = ApiJwt::default();
-            // リクエストヘッダーを解析する
-            let token = decoder.parse_header(&request)?;
-            // 解析結果に問題が無ければトークンをデコードする
-            match decoder.decode(token.as_str()) {
-                // デコードに成功したらClaimsを返す
-                Ok(token_data) => Ok(token_data.claims),
-                // エラーを返す
-                Err(error) => Err(ApiAppError::NotAuthorizeError(ApiErrorInfo::new(
-                    "authorization error", error.to_string().as_str()))),
-            }
-        })
-    }
-}
 
