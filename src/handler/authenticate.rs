@@ -7,7 +7,6 @@ use app_commons::application::sea_orm::provider::AppServiceProvider;
 use app_commons::presentation::forms::LoginForm;
 use app_commons::presentation::jwt::{ClaimsGenerator, JwtEncoder};
 use app_commons::presentation::validate::AppValidator;
-use crate::error::ApiErrorInfo;
 use crate::jwt::{ApiClaims, ApiJwt};
 use crate::{ApiAppError, Result};
 ///
@@ -45,11 +44,7 @@ impl AuthenticateHandler {
                     .content_type(APPLICATION_JSON)
                     .json(ClaimsResponse{state:String::from("authenticate success"), token}))
             }
-            Err(error) => {
-                let message = ApiAppError::from(error)?;
-                Err(ApiAppError::SearchError(ApiErrorInfo::new(
-                    "authenticate error", message.as_str())))
-            }
+            Err(error) => Err(ApiAppError::from(error))
         }
     }
 }

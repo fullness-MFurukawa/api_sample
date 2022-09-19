@@ -5,7 +5,6 @@ use mime::APPLICATION_JSON;
 use app_commons::application::sea_orm::provider::AppServiceProvider;
 use app_commons::presentation::forms::ProductRegisterForm;
 use app_commons::presentation::validate::AppValidator;
-use crate::error::ApiErrorInfo;
 use crate::jwt::ApiClaims;
 use crate::{ApiAppError, Result};
 
@@ -30,11 +29,7 @@ impl ProductRegisterHandler {
         match provider.register_service.execute(&pool, &form).await {
             Ok(new_product) => Ok(HttpResponse::Ok()
                 .content_type(APPLICATION_JSON).json(new_product)),
-            Err(error) => {
-                let message = ApiAppError::from(error)?;
-                Err(ApiAppError::SearchError(ApiErrorInfo::new(
-                    "register error", message.as_str())))
-            }
+            Err(error) => Err(ApiAppError::from(error))
         }
     }
 }
