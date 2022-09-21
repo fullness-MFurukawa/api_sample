@@ -27,7 +27,7 @@ pub enum ApiAppError {
     AuthenticateError(ApiErrorInfo) , // 認証エラー
     SearchError(ApiErrorInfo)   ,     // 検索エラー
     RegisterError(ApiErrorInfo) ,     // 登録エラー
-    InternalError(AppError)      // 内部エラー
+    InternalError(AppError)           // 内部エラー
 }
 impl Display for ApiAppError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

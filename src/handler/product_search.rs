@@ -21,14 +21,12 @@ impl ProductSearchHandler {
         // 入力値の検証
         match form.validate_value() {
             Err(error) => {
-                return Ok(HttpResponse::BadRequest()
-                    .content_type(APPLICATION_JSON).json(error.errors))
+                return Ok(HttpResponse::BadRequest().content_type(APPLICATION_JSON).json(error.errors))
             },Ok(_) => ()
         };
         // キーワードによる商品情報検索
         match provider.search_service.search(&pool, &form).await {
-            Ok(products) => Ok(HttpResponse::Ok()
-                .content_type(APPLICATION_JSON).json(products)),
+            Ok(products) => Ok(HttpResponse::Ok().content_type(APPLICATION_JSON).json(products)),
             Err(error) => Err(ApiAppError::from(error))
         }
     }
