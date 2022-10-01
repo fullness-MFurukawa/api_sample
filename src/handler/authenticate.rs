@@ -35,8 +35,8 @@ impl AuthenticateHandler {
         match provider.authenticate_service.execute(&pool, &form).await {
             Ok(user) => { // 認証成功
                 // JWTトークンの生成
-                let claims = ApiClaims::generate(&user);
-                let token = ApiJwt::encode(&claims);
+                //let claims = ApiClaims::generate(&user);
+                let token = ApiJwt::encode(&ApiClaims::generate(&user));
                 Ok(HttpResponse::Ok() // トークンを返す
                     .content_type(APPLICATION_JSON)
                     .json(ClaimsResponse{status:String::from("authenticate success"), token}))

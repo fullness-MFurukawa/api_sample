@@ -9,7 +9,6 @@ use app_commons::presentation::jwt::{ClaimsGenerator, JwtDecoder ,JwtEncoder , J
 use crate::error::ApiErrorInfo;
 use crate::{Result,ApiAppError};
 
-
 // クレーム(認証に必要な情報)
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ApiClaims {
